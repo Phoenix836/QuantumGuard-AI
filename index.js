@@ -71,6 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!form) return;
 
+  if (status) {
+    status.setAttribute('role', 'status');
+    status.setAttribute('aria-live', 'polite');
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -87,10 +92,16 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (response.ok) {
-        window.location.href = '/thank-you.html';
+        if (status) {
+          status.textContent = 'Thanks — we received your message.';
+          status.style.color = '#28a745';
+        }
+        form.reset();
       } else {
-        status.textContent = 'Something went wrong. Please try again.';
-        status.style.color = '#ff6b6b';
+        if (status) {
+          status.textContent = 'Something went wrong. Please try again.';
+          status.style.color = '#ff6b6b';
+        }
       }
     } catch {
       status.textContent = 'Network error. Please try again later.';
@@ -98,3 +109,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
